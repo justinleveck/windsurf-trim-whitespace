@@ -1,0 +1,30 @@
+{
+    "name": "windsurf-trim-whitespace",
+    "displayName": "Windsurf Trim Whitespace",
+    "description": "Removes trailing whitespace before saving in Windsurf",
+    "version": "0.0.1",
+    "publisher": "Justin Leveck",
+    "engines": {
+      "vscode": "^1.85.0"
+    },
+    "categories": [
+      "Other"
+    ],
+    "activationEvents": [
+      "onStartupFinished"
+    ],
+    "main": "./dist/extension.js",
+    "contributes": {},
+    "scripts": {
+      "vscode:prepublish": "pnpm run compile && pnpm run esbuild",
+      "compile": "tsc -p ./",
+      "esbuild": "esbuild ./out/extension.js --bundle --outfile=dist/extension.js --external:vscode --format=cjs --platform=node",
+      "watch": "tsc -watch -p ./"
+    },
+    "devDependencies": {
+      "@types/vscode": "^1.85.0",
+      "@types/node": "^18.x",
+      "typescript": "^5.3.3",
+      "esbuild": "^0.20.1"
+    }
+  }
