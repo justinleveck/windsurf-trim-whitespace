@@ -5,6 +5,10 @@
     "version": "0.0.1",
     "publisher": "justinleveck",
     "icon": "icon.png",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/justinleveck/windsurf-trim-whitespace.git"
+    },
     "engines": {
       "vscode": "^1.85.0",
       "windsurf": "^1.0.0"
