@@ -18,7 +18,7 @@
     ],
     "activationEvents": [
       "onStartupFinished",
-      "*"
+      "onCommand:windsurf-trim-whitespace.trimWhitespace"
     ],
     "main": "./dist/extension.js",
     "contributes": {
