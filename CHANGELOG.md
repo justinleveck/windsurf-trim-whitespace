@@ -1,9 +1,14 @@
 # Change Log
 
-All notable changes to the "windsurf-trim-whitespace" extension will be documented in this file.
+All notable changes to the "Windsurf Trim Whitespace" extension will be documented in this file.
 
-Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
+The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](https://semver.org/).
 
-## [Unreleased]
+## [0.0.1] - 2025-03-07
 
-- Initial release
+### Added
+- Initial release of Windsurf Trim Whitespace extension
+- Automatic trailing whitespace removal on file save
+- Configuration option to enable/disable the extension
+- Configuration option to exclude specific language types
+- Manual command to trigger whitespace trimming via command palette

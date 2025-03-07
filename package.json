@@ -3,18 +3,43 @@
     "displayName": "Windsurf Trim Whitespace",
     "description": "Removes trailing whitespace before saving in Windsurf",
     "version": "0.0.1",
-    "publisher": "Justin Leveck",
+    "publisher": "justinleveck",
+    "icon": "icon.png",
     "engines": {
-      "vscode": "^1.85.0"
+      "vscode": "^1.85.0",
+      "windsurf": "^1.0.0"
     },
     "categories": [
       "Other"
     ],
     "activationEvents": [
-      "onStartupFinished"
+      "onStartupFinished",
+      "*"
     ],
     "main": "./dist/extension.js",
-    "contributes": {},
+    "contributes": {
+      "commands": [
+        {
+          "command": "windsurf-trim-whitespace.trimWhitespace",
+          "title": "Trim Trailing Whitespace"
+        }
+      ],
+      "configuration": {
+        "title": "Windsurf Trim Whitespace",
+        "properties": {
+          "windsurfTrimWhitespace.enabled": {
+            "type": "boolean",
+            "default": true,
+            "description": "Enable/disable automatic trimming of trailing whitespace on save"
+          },
+          "windsurfTrimWhitespace.excludedLanguages": {
+            "type": "array",
+            "default": [],
+            "description": "List of language IDs for which whitespace trimming should be disabled"
+          }
+        }
+      }
+    },
     "scripts": {
       "vscode:prepublish": "pnpm run compile && pnpm run esbuild",
       "compile": "tsc -p ./",

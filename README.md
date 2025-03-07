@@ -1,71 +1,70 @@
-# windsurf-trim-whitespace README
+# Windsurf Trim Whitespace
 
-This is the README for your extension "windsurf-trim-whitespace". After writing up a brief description, we recommend including the following sections.
+A simple Windsurf extension that automatically removes trailing whitespace from your files when saving. Keep your code clean without thinking about it!
 
 ## Features
 
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
-
-For example if there is an image subfolder under your extension project workspace:
-
-\!\[feature X\]\(images/feature-x.png\)
-
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
+- **Automatic Whitespace Trimming**: Automatically removes trailing whitespace from all lines when you save a file
+- **Language-specific Exclusions**: Configure specific language types to exclude from whitespace trimming
+- **Manual Trigger**: Use the command palette to manually trigger whitespace trimming when needed
+- **Lightweight**: Minimal performance impact on your editing experience
 
 ## Requirements
 
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
+- Windsurf v1.0.0 or higher
 
 ## Extension Settings
 
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
-
-For example:
-
 This extension contributes the following settings:
 
-* `myExtension.enable`: Enable/disable this extension.
-* `myExtension.thing`: Set to `blah` to do something.
+* `windsurfTrimWhitespace.enabled`: Enable/disable automatic trimming of trailing whitespace on save (default: `true`)
+* `windsurfTrimWhitespace.excludedLanguages`: List of language IDs for which whitespace trimming should be disabled (default: `[]`)
+
+Example configuration in settings.json:
+
+```json
+{
+  "windsurfTrimWhitespace.enabled": true,
+  "windsurfTrimWhitespace.excludedLanguages": ["markdown", "plaintext"]
+}
+```
 
 ## Known Issues
 
-Calling out known issues can help limit users opening duplicate issues against your extension.
+No known issues at this time. If you encounter any problems, please report them on the [GitHub repository](https://github.com/justinleveck/windsurf-trim-whitespace/issues).
 
 ## Release Notes
 
-Users appreciate release notes as you update your extension.
+### 0.0.1
 
-### 1.0.0
-
-Initial release of ...
-
-### 1.0.1
-
-Fixed issue #.
-
-### 1.1.0
-
-Added features X, Y, and Z.
+Initial release of Windsurf Trim Whitespace:
+- Automatic trailing whitespace removal on save
+- Configurable language exclusions
+- Manual command for trimming whitespace
 
 ---
 
-## Following extension guidelines
+## Rebuild the Extension
 
-Ensure that you've read through the extensions guidelines and follow the best practices for creating your extension.
+To rebuild the extension, run the following commands:
 
-* [Extension Guidelines](https://code.visualstudio.com/api/references/extension-guidelines)
+```
+pnpm run compile
+pnpm run esbuild
+```
 
-## Working with Markdown
+Or use:
 
-You can author your README using Visual Studio Code. Here are some useful editor keyboard shortcuts:
+```
+pnpm run vscode:prepublish
+```
 
-* Split the editor (`Cmd+\` on macOS or `Ctrl+\` on Windows and Linux).
-* Toggle preview (`Shift+Cmd+V` on macOS or `Shift+Ctrl+V` on Windows and Linux).
-* Press `Ctrl+Space` (Windows, Linux, macOS) to see a list of Markdown snippets.
+Close and reopen Windsurf to load the updated extension.
 
-## For more information
+## Create a VSIX file
 
-* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
+```
+vsce package --no-dependencies
+```
 
 **Enjoy!**

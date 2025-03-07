@@ -3,8 +3,12 @@
 out/**
 node_modules/**
 src/**
+.git/**
+.history/**
 .gitignore
+.npmrc
 .yarnrc
+.vscodeignore
 esbuild.js
 vsc-extension-quickstart.md
 **/tsconfig.json
@@ -12,3 +16,6 @@ vsc-extension-quickstart.md
 **/*.map
 **/*.ts
 **/.vscode-test.*
+pnpm-lock.yaml
+package-lock.json
+.eslintrc.json
