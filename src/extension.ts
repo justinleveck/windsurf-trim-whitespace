@@ -1,38 +1,108 @@
 import * as vscode from 'vscode';
 
 export function activate(context: vscode.ExtensionContext) {
-    // Register a command that can be called manually if needed
-    const trimWhitespaceCommand = vscode.commands.registerCommand('windsurf-trim-whitespace.trimWhitespace', () => {
-        const editor = vscode.window.activeTextEditor;
-        if (editor) {
-            trimWhitespaceInDocument(editor.document);
-        } else {
-            vscode.window.showInformationMessage('No active editor to trim whitespace');
-        }
-    });
+    try {
+        console.log('Windsurf Trim Whitespace extension is now activating...');
 
-    // Auto-trim on save
-    const disposable = vscode.workspace.onWillSaveTextDocument((event) => {
-        // Check if we should trim for this file type
-        const config = vscode.workspace.getConfiguration('windsurfTrimWhitespace');
-        const enabled = config.get<boolean>('enabled', true);
-        const excludedLanguages = config.get<string[]>('excludedLanguages', []);
+        // Show notification for debugging purposes
+        vscode.window.showInformationMessage('Windsurf Trim Whitespace extension activated');
 
-        if (!enabled) {
-            return;
-        }
+        // Log the full configuration to verify settings are loaded
+        const config = vscode.workspace.getConfiguration('trimWhitespace');
+        console.log('Full configuration:', config);
+        console.log('Configuration values:', {
+            enabled: config.get('enabled'),
+            trimAfterWindsurfChanges: config.get('trimAfterWindsurfChanges'),
+            excludedLanguages: config.get('excludedLanguages')
+        });
 
-        const document = event.document;
+        // Register a command that can be called manually if needed
+        const trimWhitespaceCommand = vscode.commands.registerCommand('windsurf-trim-whitespace.trimWhitespace', () => {
+            const editor = vscode.window.activeTextEditor;
+            if (editor) {
+                trimWhitespaceInDocument(editor.document).then(success => {
+                    if (success) {
+                        vscode.window.showInformationMessage('Trailing whitespace trimmed successfully');
+                    } else {
+                        vscode.window.showWarningMessage('Failed to trim whitespace');
+                    }
+                });
+            } else {
+                vscode.window.showInformationMessage('No active editor to trim whitespace');
+            }
+        });
 
-        // Skip excluded languages
-        if (document.languageId && excludedLanguages.includes(document.languageId)) {
-            return;
-        }
+        // Auto-trim on save
+        const onSaveDisposable = vscode.workspace.onWillSaveTextDocument((event) => {
+            const config = vscode.workspace.getConfiguration('trimWhitespace');
+            const enabled = config.get<boolean>('enabled', true);
+            const excludedLanguages = config.get<string[]>('excludedLanguages', []);
 
-        event.waitUntil(trimWhitespaceInDocument(document));
-    });
+            if (!enabled) {
+                console.log('Trimming disabled by configuration');
+                return;
+            }
 
-    context.subscriptions.push(disposable, trimWhitespaceCommand);
+            const document = event.document;
+            if (document.languageId && excludedLanguages.includes(document.languageId)) {
+                console.log(`Trimming skipped for language: ${document.languageId}`);
+                return;
+            }
+
+            console.log('Trimming whitespace on save for:', document.fileName);
+            event.waitUntil(trimWhitespaceInDocument(document));
+        });
+
+        // Listen for text document changes (including those made by Windsurf)
+        const onTextChangeDisposable = vscode.workspace.onDidChangeTextDocument((event) => {
+            const config = vscode.workspace.getConfiguration('trimWhitespace');
+            const enabled = config.get<boolean>('enabled', true);
+            const trimAfterWindsurfChanges = config.get<boolean>('trimAfterWindsurfChanges', false);
+            const excludedLanguages = config.get<string[]>('excludedLanguages', []);
+
+            if (!enabled || !trimAfterWindsurfChanges) {
+                return;
+            }
+
+            const document = event.document;
+            if (document.languageId && excludedLanguages.includes(document.languageId)) {
+                return;
+            }
+
+            // Safeguard against empty content changes
+            if (event.contentChanges.length === 0) {
+                console.log('No content changes detected, skipping trim');
+                return;
+            }
+
+            const isWindsurfChange = event.contentChanges.some(change => {
+                if (!change.text) return false;
+                return change.text.includes('Windsurf') ||
+                    (change.text.length > 50 && change.range.start.line !== change.range.end.line);
+            });
+
+            if (isWindsurfChange) {
+                console.log('Detected Windsurf change, scheduling trim for:', document.fileName);
+                setTimeout(() => {
+                    trimWhitespaceInDocument(document).then(success => {
+                        if (success) {
+                            console.log('Whitespace trimmed after Windsurf change');
+                        } else {
+                            console.log('Failed to trim whitespace after Windsurf change');
+                        }
+                    });
+                }, 100);
+            }
+        });
+
+        // Register disposables
+        context.subscriptions.push(onSaveDisposable, onTextChangeDisposable, trimWhitespaceCommand);
+
+        console.log('Windsurf Trim Whitespace extension is now active!');
+    } catch (error) {
+        console.error('Windsurf Trim Whitespace activation failed:', error);
+        vscode.window.showErrorMessage('Windsurf Trim Whitespace activation failed: ' + (error instanceof Error ? error.message : String(error)));
+    }
 }
 
 // Helper function to trim whitespace in a document
@@ -45,6 +115,7 @@ async function trimWhitespaceInDocument(document: vscode.TextDocument): Promise<
         const trimmedText = text.trimEnd();
 
         if (text !== trimmedText) {
+            console.log(`Trimming whitespace on line ${i}: "${text}" -> "${trimmedText}"`);
             const range = new vscode.Range(i, 0, i, text.length);
             edits.push(vscode.TextEdit.replace(range, trimmedText));
         }
@@ -55,10 +126,11 @@ async function trimWhitespaceInDocument(document: vscode.TextDocument): Promise<
         workspaceEdit.set(document.uri, edits);
         return vscode.workspace.applyEdit(workspaceEdit);
     } else {
+        console.log('No trailing whitespace found to trim in:', document.fileName);
         return Promise.resolve(true);
     }
 }
 
 export function deactivate() {
-    // Clean up resources when the extension is deactivated
+    console.log('Windsurf Trim Whitespace extension is deactivating...');
 }

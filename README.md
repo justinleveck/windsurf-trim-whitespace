@@ -56,6 +56,7 @@ pnpm run esbuild
 Or use:
 
 ```
+rm -rf out dist
 pnpm run vscode:prepublish
 ```
 

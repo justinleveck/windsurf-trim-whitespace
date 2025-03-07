@@ -1,59 +1,75 @@
 {
-    "name": "windsurf-trim-whitespace",
-    "displayName": "Windsurf Trim Whitespace",
-    "description": "Removes trailing whitespace before saving in Windsurf",
-    "version": "0.0.1",
-    "publisher": "justinleveck",
-    "icon": "icon.png",
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/justinleveck/windsurf-trim-whitespace.git"
-    },
-    "engines": {
-      "vscode": "^1.85.0",
-      "windsurf": "^1.0.0"
-    },
-    "categories": [
-      "Other"
+  "name": "windsurf-trim-whitespace",
+  "displayName": "Windsurf Trim Whitespace",
+  "description": "Removes trailing whitespace before saving in Windsurf",
+  "version": "0.0.1",
+  "publisher": "justinleveck",
+  "icon": "icon.png",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/justinleveck/windsurf-trim-whitespace.git"
+  },
+  "engines": {
+    "vscode": "^1.85.0",
+    "windsurf": "^1.0.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "*"
+  ],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "windsurf-trim-whitespace.trimWhitespace",
+        "title": "Trim Trailing Whitespace"
+      }
     ],
-    "activationEvents": [
-      "onStartupFinished",
-      "onCommand:windsurf-trim-whitespace.trimWhitespace"
-    ],
-    "main": "./dist/extension.js",
-    "contributes": {
-      "commands": [
-        {
-          "command": "windsurf-trim-whitespace.trimWhitespace",
-          "title": "Trim Trailing Whitespace"
-        }
-      ],
-      "configuration": {
-        "title": "Windsurf Trim Whitespace",
-        "properties": {
-          "windsurfTrimWhitespace.enabled": {
-            "type": "boolean",
-            "default": true,
-            "description": "Enable/disable automatic trimming of trailing whitespace on save"
-          },
-          "windsurfTrimWhitespace.excludedLanguages": {
-            "type": "array",
-            "default": [],
-            "description": "List of language IDs for which whitespace trimming should be disabled"
-          }
+    "configuration": {
+      "title": "Trim Whitespace",
+      "properties": {
+        "trimWhitespace.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable/disable automatic trimming of trailing whitespace on save",
+          "scope": "resource",
+          "order": 1
+        },
+        "trimWhitespace.excludedLanguages": {
+          "type": "array",
+          "default": [],
+          "description": "List of language IDs for which whitespace trimming should be disabled",
+          "scope": "resource",
+          "order": 2
+        },
+        "trimWhitespace.trimAfterWindsurfChanges": {
+          "type": "boolean",
+          "default": false,
+          "description": "Enable/disable automatic trimming of trailing whitespace after Windsurf makes changes",
+          "scope": "resource",
+          "order": 3
         }
       }
-    },
-    "scripts": {
-      "vscode:prepublish": "pnpm run compile && pnpm run esbuild",
-      "compile": "tsc -p ./",
-      "esbuild": "esbuild ./out/extension.js --bundle --outfile=dist/extension.js --external:vscode --format=cjs --platform=node",
-      "watch": "tsc -watch -p ./"
-    },
-    "devDependencies": {
-      "@types/vscode": "^1.85.0",
-      "@types/node": "^18.x",
-      "typescript": "^5.3.3",
-      "esbuild": "^0.20.1"
     }
+  },
+  "scripts": {
+    "vscode:prepublish": "pnpm run compile && pnpm run esbuild",
+    "compile": "tsc -p ./",
+    "esbuild": "esbuild ./out/extension.js --bundle --outfile=dist/extension.js --external:vscode --format=cjs --platform=node",
+    "watch": "tsc -watch -p ./"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.85.0",
+    "@types/node": "^18.x",
+    "typescript": "^5.3.3",
+    "esbuild": "^0.20.1"
+  },
+  "__metadata": {
+    "isApplicationScoped": false,
+    "installedTimestamp": 1741377750028,
+    "pinned": true,
+    "source": "vsix"
   }
+}
